@@ -1,32 +1,71 @@
-<div class="container">
-  <h2>Products</h2>
-  <div *ngIf="errorMessage" class="alert alert-danger">
-    {{ errorMessage }}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Products</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <button type="button" class="btn btn-sm btn-outline-secondary me-2">
+      <i class="bi bi-filter"></i> Filter
+    </button>
+    <button type="button" class="btn btn-sm btn-primary">
+      <i class="bi bi-plus-lg"></i> Add Product
+    </button>
   </div>
-  <ng-container *ngIf="products$ | async as products; else loading">
-    <table class="table" *ngIf="products.length > 0; else noData">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Price</th>
-          <th>Quantity</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let p of products">
-          <td>{{p.id}}</td>
-          <td>{{p.name}}</td>
-          <td>{{p.price}}</td>
-          <td>{{p.quantity}}</td>
-        </tr>
-      </tbody>
-    </table>
-    <ng-template #noData>
-      <div class="alert alert-info">No products found.</div>
-    </ng-template>
-  </ng-container>
-  <ng-template #loading>
-    <div class="alert alert-info">Loading products...</div>
-  </ng-template>
 </div>
+
+<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+  <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
+</div>
+
+<ng-container *ngIf="products$ | async as products; else loading">
+  <div class="row g-4" *ngIf="products.length > 0; else noData">
+    <div class="col-md-6 col-lg-4" *ngFor="let p of products">
+      <div class="card-panel h-100 p-4 position-relative">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div class="icon-shape bg-primary-subtle text-primary rounded-3 p-3">
+            <i class="bi bi-box-seam fs-4"></i>
+          </div>
+          <div class="dropdown">
+            <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#">Edit</a></li>
+              <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+            </ul>
+          </div>
+        </div>
+        <h5 class="card-title mb-1">{{p.name}}</h5>
+        <p class="text-muted small mb-3">ID: #{{p.id}}</p>
+        
+        <div class="d-flex justify-content-between align-items-end mt-auto">
+          <div>
+            <div class="text-muted small mb-1">Price</div>
+            <div class="fs-5 fw-bold text-dark">{{p.price | currency}}</div>
+          </div>
+          <div class="text-end">
+            <div class="text-muted small mb-1">Stock</div>
+            <span class="badge rounded-pill" [ngClass]="{'bg-success-subtle text-success': p.quantity > 10, 'bg-warning-subtle text-warning': p.quantity <= 10}">
+              {{p.quantity}} units
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #noData>
+    <div class="text-center py-5">
+      <div class="mb-3">
+        <i class="bi bi-box-seam text-muted display-4"></i>
+      </div>
+      <h5 class="text-muted">No products found</h5>
+      <button class="btn btn-primary mt-3">Add First Product</button>
+    </div>
+  </ng-template>
+</ng-container>
+
+<ng-template #loading>
+  <div class="d-flex justify-content-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</ng-template>

@@ -1,30 +1,74 @@
-<div class="container">
-  <h2>Customers</h2>
-  <div *ngIf="errorMessage" class="alert alert-danger">
-    {{ errorMessage }}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Customers</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <button type="button" class="btn btn-sm btn-outline-secondary me-2">
+      <i class="bi bi-share"></i> Share
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary me-2">
+      <i class="bi bi-file-earmark-arrow-down"></i> Export
+    </button>
+    <button type="button" class="btn btn-sm btn-primary">
+      <i class="bi bi-plus-lg"></i> Add Customer
+    </button>
   </div>
-  <ng-container *ngIf="customers$ | async as customers; else loading">
-    <table class="table" *ngIf="customers.length > 0; else noData">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let c of customers">
-          <td>{{c.id}}</td>
-          <td>{{c.name}}</td>
-          <td>{{c.email}}</td>
-        </tr>
-      </tbody>
-    </table>
-    <ng-template #noData>
-      <div class="alert alert-info">No customers found.</div>
-    </ng-template>
-  </ng-container>
-  <ng-template #loading>
-    <div class="alert alert-info">Loading customers...</div>
-  </ng-template>
 </div>
+
+<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+  <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
+</div>
+
+<ng-container *ngIf="customers$ | async as customers; else loading">
+  <div class="card-panel p-0 overflow-hidden" *ngIf="customers.length > 0; else noData">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0 align-middle">
+        <thead class="bg-light">
+          <tr>
+            <th class="ps-4 py-3">Customer</th>
+            <th class="py-3">Email</th>
+            <th class="py-3">Status</th>
+            <th class="text-end pe-4 py-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of customers">
+            <td class="ps-4">
+              <div class="d-flex align-items-center">
+                <div class="avatar-initials me-3 bg-primary-subtle text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                  {{c.name.charAt(0)}}
+                </div>
+                <div>
+                  <div class="fw-bold text-dark">{{c.name}}</div>
+                  <div class="small text-muted">ID: #{{c.id}}</div>
+                </div>
+              </div>
+            </td>
+            <td>{{c.email}}</td>
+            <td><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Active</span></td>
+            <td class="text-end pe-4">
+              <button class="btn btn-sm btn-white border me-2 text-muted"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-white border text-danger"><i class="bi bi-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <ng-template #noData>
+    <div class="text-center py-5">
+      <div class="mb-3">
+        <i class="bi bi-people text-muted display-4"></i>
+      </div>
+      <h5 class="text-muted">No customers found</h5>
+      <p class="text-muted mb-4">Get started by adding a new customer.</p>
+      <button class="btn btn-primary">Add Customer</button>
+    </div>
+  </ng-template>
+</ng-container>
+
+<ng-template #loading>
+  <div class="d-flex justify-content-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</ng-template>
