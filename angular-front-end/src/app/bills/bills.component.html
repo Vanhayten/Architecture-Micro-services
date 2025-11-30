@@ -1,0 +1,24 @@
+<div class="container" *ngIf="bill">
+  <h2>Bill #{{bill.id}}</h2>
+  <p>Date: {{bill.billingDate | date:'medium'}}</p>
+  <p>Customer ID: {{bill.customerId}}</p>
+  <h3>Items</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Product ID</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pi of bill.productItems">
+        <td>{{pi.productId}}</td>
+        <td>{{pi.price}}</td>
+        <td>{{pi.quantity}}</td>
+        <td>{{pi.price * pi.quantity}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
