@@ -12,6 +12,6 @@ export class InventoryService {
   constructor(private http: HttpClient) { }
 
   public getProducts(): Observable<any> {
-    return this.http.get(`${environment.gatewayUrl}/INVENTORY-SERVICE/products`);
+    return this.http.get(`${environment.gatewayUrl}/inventory-service/products`);
   }
 }

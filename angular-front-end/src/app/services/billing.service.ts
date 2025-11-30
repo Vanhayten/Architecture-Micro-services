@@ -12,6 +12,6 @@ export class BillingService {
   constructor(private http: HttpClient) { }
 
   public getBill(id: number): Observable<any> {
-    return this.http.get(`${environment.gatewayUrl}/BILLING-SERVICE/bills/` + id);
+    return this.http.get(`${environment.gatewayUrl}/billing-service/bills/` + id);
   }
 }
