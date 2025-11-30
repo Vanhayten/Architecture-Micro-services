@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BillingService } from '../services/billing.service';
 
+import { Bill } from '../models/bill.model';
+
 @Component({
   selector: 'app-bills',
   standalone: true,
@@ -10,7 +12,7 @@ import { BillingService } from '../services/billing.service';
   styleUrl: './bills.component.css'
 })
 export class BillsComponent implements OnInit {
-  bill: any;
+  bill: Bill | undefined;
 
   constructor(private billingService: BillingService) { }
 

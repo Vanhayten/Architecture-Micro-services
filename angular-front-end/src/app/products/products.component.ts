@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InventoryService } from '../services/inventory.service';
 
+import { Product } from '../models/product.model';
+
 @Component({
   selector: 'app-products',
   standalone: true,
@@ -10,7 +12,7 @@ import { InventoryService } from '../services/inventory.service';
   styleUrl: './products.component.css'
 })
 export class ProductsComponent implements OnInit {
-  products: any;
+  products: Product[] | undefined;
 
   constructor(private inventoryService: InventoryService) { }
 
