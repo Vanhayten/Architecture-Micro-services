@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CustomerService } from '../services/customer.service';
 
 import { Customer } from '../models/customer.model';
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-customers',
@@ -12,18 +13,17 @@ import { Customer } from '../models/customer.model';
   styleUrl: './customers.component.css'
 })
 export class CustomersComponent implements OnInit {
-  customers: Customer[] | undefined;
+  customers$: Observable<Customer[]> | undefined;
+  errorMessage: string | undefined;
 
   constructor(private customerService: CustomerService) { }
 
   ngOnInit(): void {
-    this.customerService.getCustomers().subscribe({
-      next: (data) => {
-        this.customers = data;
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
+    this.customers$ = this.customerService.getCustomers().pipe(
+      catchError(err => {
+        this.errorMessage = err.message;
+        return throwError(() => err);
+      })
+    );
   }
 }

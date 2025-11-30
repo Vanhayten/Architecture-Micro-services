@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BillingService } from '../services/billing.service';
 
 import { Bill } from '../models/bill.model';
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-bills',
@@ -12,18 +13,17 @@ import { Bill } from '../models/bill.model';
   styleUrl: './bills.component.css'
 })
 export class BillsComponent implements OnInit {
-  bill: Bill | undefined;
+  bill$: Observable<Bill> | undefined;
+  errorMessage: string | undefined;
 
   constructor(private billingService: BillingService) { }
 
   ngOnInit(): void {
-    this.billingService.getBill(1).subscribe({
-      next: (data) => {
-        this.bill = data;
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
+    this.bill$ = this.billingService.getBill(1).pipe(
+      catchError(err => {
+        this.errorMessage = err.message;
+        return throwError(() => err);
+      })
+    );
   }
 }

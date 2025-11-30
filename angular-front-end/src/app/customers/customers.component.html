@@ -1,19 +1,30 @@
 <div class="container">
   <h2>Customers</h2>
-  <table class="table" *ngIf="customers">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let c of customers">
-        <td>{{c.id}}</td>
-        <td>{{c.name}}</td>
-        <td>{{c.email}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+  <ng-container *ngIf="customers$ | async as customers; else loading">
+    <table class="table" *ngIf="customers.length > 0; else noData">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of customers">
+          <td>{{c.id}}</td>
+          <td>{{c.name}}</td>
+          <td>{{c.email}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #noData>
+      <div class="alert alert-info">No customers found.</div>
+    </ng-template>
+  </ng-container>
+  <ng-template #loading>
+    <div class="alert alert-info">Loading customers...</div>
+  </ng-template>
 </div>

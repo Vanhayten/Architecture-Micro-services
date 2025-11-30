@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { InventoryService } from '../services/inventory.service';
 
 import { Product } from '../models/product.model';
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-products',
@@ -12,18 +13,17 @@ import { Product } from '../models/product.model';
   styleUrl: './products.component.css'
 })
 export class ProductsComponent implements OnInit {
-  products: Product[] | undefined;
+  products$: Observable<Product[]> | undefined;
+  errorMessage: string | undefined;
 
   constructor(private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
-    this.inventoryService.getProducts().subscribe({
-      next: (data) => {
-        this.products = data;
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
+    this.products$ = this.inventoryService.getProducts().pipe(
+      catchError(err => {
+        this.errorMessage = err.message;
+        return throwError(() => err);
+      })
+    );
   }
 }
